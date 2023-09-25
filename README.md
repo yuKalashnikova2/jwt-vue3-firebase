@@ -10,3 +10,4 @@ JWT-аутентификация c Firebase
 - **Firebase** 
 - **ESLint**
 - **Prettier** 
+- **Axios** 
