@@ -4,6 +4,7 @@ import { useAuthStore } from '../stores/auth'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import Message from 'primevue/message'
+import TheLoader from '../components/TheLoader.vue'
 
 const authStore = useAuthStore()
 
@@ -32,7 +33,8 @@ const signup = async () => {
       </span>
       <InputText type="password" v-model="password" placeholder="Password" />
     </div>
-    <div class="flex flex-column gap-3">
+    <TheLoader v-if="authStore.loader" />
+    <div v-else class="flex flex-column gap-3">
       <Button label="Signup" @click="signup" />
       <span>Are you already registered? <router-link to="/signin">Sign in</router-link></span>
     </div>

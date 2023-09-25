@@ -14,7 +14,11 @@ export const useAuthStore = defineStore('auth', () => {
 
   const error = ref('')
 
+  const loader = ref(false)
+
   const signup = async (payload) => {
+    error.value = ''
+    loader.value = true
     try {
       const response = await axios.post(
         `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
@@ -30,7 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
         refreshToken: response.data.refreshToken,
         expiresIn: response.data.expiresIn
       }
-      console.log(response.data)
+      loader.value = false
     } catch (err) {
       switch (err.response.data.error.message) {
         case 'EMAIL_EXISTS':
@@ -52,8 +56,8 @@ export const useAuthStore = defineStore('auth', () => {
           error.value = 'Error'
           break
       }
-      console.log(error, 'TYT')
+      loader.value = false
     }
   }
-  return { signup, userInfo, error }
+  return { signup, userInfo, error, loader }
 })
