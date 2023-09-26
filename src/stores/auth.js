@@ -16,12 +16,13 @@ export const useAuthStore = defineStore('auth', () => {
 
   const loader = ref(false)
 
-  const signup = async (payload) => {
+  const authen = async (payload, type) => {
+    const stringUrl = type === 'signup' ? 'signUp' : 'signInWithPassword'
     error.value = ''
     loader.value = true
     try {
       const response = await axios.post(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:${stringUrl}?key=${API_KEY}`,
         {
           ...payload,
           returnSecureToken: true
@@ -34,6 +35,7 @@ export const useAuthStore = defineStore('auth', () => {
         refreshToken: response.data.refreshToken,
         expiresIn: response.data.expiresIn
       }
+      console.log(response.data, 'VOT DANNIE')
       loader.value = false
     } catch (err) {
       switch (err.response.data.error.message) {
@@ -52,12 +54,20 @@ export const useAuthStore = defineStore('auth', () => {
         case 'INVALID_PASSWORD':
           error.value = 'Неверный email или пароль. Попробуйте еще раз'
           break
+        case 'WEAK_PASSWORD':
+          error.value = 'Пароль должен быть минимум 6 символов'
+          break
+        case 'EMAIL_NOT_FOUND':
+          error.value = 'Такого пользователя не сущетсвует. Возможно, пользователь был удален'
+          break
+
         default:
-          error.value = 'Error'
+          error.value = 'Неизвестная ошибка. Попробуйте еще раз'
           break
       }
+      console.log(err, 'ОТЛОВ ОШИБКИ')
       loader.value = false
     }
   }
-  return { signup, userInfo, error, loader }
+  return { authen, userInfo, error, loader }
 })
