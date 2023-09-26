@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-const API_KEY = 'AIzaSyBrPqD9haJdxGoskvv6UXvGUq4_Ev15G8Y'
+const API_KEY = import.meta.env.VITE_API_KEY_FIREBASE
 export const useAuthStore = defineStore('auth', () => {
   const userInfo = ref({
     token: '',
