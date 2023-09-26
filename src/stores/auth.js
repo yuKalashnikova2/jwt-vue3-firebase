@@ -35,8 +35,6 @@ export const useAuthStore = defineStore('auth', () => {
         refreshToken: response.data.refreshToken,
         expiresIn: response.data.expiresIn
       }
-      console.log(response.data, 'VOT DANNIE')
-      loader.value = false
     } catch (err) {
       switch (err.response.data.error.message) {
         case 'EMAIL_EXISTS':
@@ -65,7 +63,8 @@ export const useAuthStore = defineStore('auth', () => {
           error.value = 'Неизвестная ошибка. Попробуйте еще раз'
           break
       }
-      console.log(err, 'ОТЛОВ ОШИБКИ')
+      throw error.value
+    } finally {
       loader.value = false
     }
   }

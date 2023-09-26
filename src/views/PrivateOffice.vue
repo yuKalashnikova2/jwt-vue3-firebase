@@ -1,0 +1,5 @@
+<template>
+    <div>
+        <h2>Личный кабинет</h2>
+    </div>
+</template>
