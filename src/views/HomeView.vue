@@ -1,9 +1,10 @@
 <script setup>
-import Button from 'primevue/button';
+import Button from 'primevue/button'
 </script>
 
 <template>
   <main>
-    <Button label="Начать" />
+    <h1>Главная страница</h1>
+    <RouterLink to="signin"> <Button label="Начать" /></RouterLink>
   </main>
 </template>
