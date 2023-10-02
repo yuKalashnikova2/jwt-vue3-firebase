@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '../stores/auth.js'
 import HomeView from '../views/HomeView.vue'
 import SignUp from '../views/SignUp.vue'
 import SignIn from '../views/SignIn.vue'
@@ -15,19 +16,40 @@ const router = createRouter({
     {
       path: '/signup',
       name: 'signup',
-      component: SignUp
+      component: SignUp,
+      meta: {
+        auth: false
+      }
     },
     {
       path: '/signin',
       name: 'signin',
-      component: SignIn
+      component: SignIn,
+      meta: {
+        auth: false
+      }
     },
     {
       path: '/private',
       name: 'private',
-      component: PrivateOffice
-    },
+      component: PrivateOffice,
+      meta: {
+        auth: true
+      }
+    }
   ]
 })
 
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+
+  if (to.meta.auth && !authStore.userInfo.token) {
+    next('/signin')
+  }
+  if (!to.meta.auth && authStore.userInfo.token) {
+    next('/private')
+  } else {
+    next()
+  }
+})
 export default router
